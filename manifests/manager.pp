@@ -314,12 +314,12 @@ class wazuh::manager (
 
   ## Determine which kernel and family puppet is running on. Will be used on _localfile, _rootcheck, _syscheck & _sca
 
-  if ($::kernel == 'windows') {
+  if ($facts['kernel'] == 'windows') {
     $kernel = 'Linux'
 
   }else{
     $kernel = 'Linux'
-    if ($::osfamily == 'Debian'){
+    if ($facts['os']['family'] == 'Debian'){
       $os_family = 'debian'
     }else{
       $os_family = 'centos'
@@ -328,7 +328,7 @@ class wazuh::manager (
 
 
   if ( $ossec_syscheck_whodata_directories_1 == 'yes' ) or ( $ossec_syscheck_whodata_directories_2 == 'yes' ) {
-    case $::operatingsystem {
+    case $facts['os']['name'] {
       'Debian', 'debian', 'Ubuntu', 'ubuntu': {
         package { 'Installing Auditd...':
           name => 'auditd',
@@ -358,7 +358,7 @@ class wazuh::manager (
     validate_legacy(Array, 'validate_array', $ossec_emailto)
   }
 
-  if $::osfamily == 'windows' {
+  if $facts['os']['family'] == 'windows' {
     fail('The ossec module does not yet support installing the OSSEC HIDS server on Windows')
   }
 
@@ -407,18 +407,18 @@ class wazuh::manager (
 
   ## Declaring variables for localfile and wodles generation
 
-  case $::operatingsystem{
+  case $facts['os']['name'] {
     'RedHat', 'OracleLinux':{
       $apply_template_os = 'rhel'
-      if ( $::operatingsystemrelease =~ /^9.*/ ){
+      if ( $facts['os']['release']['full'] =~ /^9.*/ ){
         $rhel_version = '9'
-      }elsif ( $::operatingsystemrelease =~ /^8.*/ ){
+      }elsif ( $facts['os']['release']['full'] =~ /^8.*/ ){
         $rhel_version = '8'
-      }elsif ( $::operatingsystemrelease =~ /^7.*/ ){
+      }elsif ( $facts['os']['release']['full'] =~ /^7.*/ ){
         $rhel_version = '7'
-      }elsif ( $::operatingsystemrelease =~ /^6.*/ ){
+      }elsif ( $facts['os']['release']['full'] =~ /^6.*/ ){
         $rhel_version = '6'
-      }elsif ( $::operatingsystemrelease =~ /^5.*/ ){
+      }elsif ( $facts['os']['release']['full'] =~ /^5.*/ ){
         $rhel_version = '5'
       }else{
         fail('This ossec module has not been tested on your distribution')

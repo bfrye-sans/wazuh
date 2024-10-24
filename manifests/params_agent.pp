@@ -227,7 +227,7 @@ class wazuh::params_agent {
 
 
   # OS specific configurations
-  case $::kernel {
+  case $facts['kernel'] {
     'Linux': {
       $agent_package_name = 'wazuh-agent'
       $agent_service_name = 'wazuh-agent'
@@ -300,7 +300,7 @@ class wazuh::params_agent {
       $ossec_ruleset_user_defined_decoder_dir = 'etc/decoders'
       $ossec_ruleset_user_defined_rule_dir = 'etc/rules'
 
-      case $::osfamily {
+      case $fact['os']['family'] {
         'Debian': {
           $service_has_status = false
           $ossec_service_provider = undef
@@ -355,13 +355,13 @@ class wazuh::params_agent {
             { 'location' => '/var/log/secure', 'log_format' => 'syslog' },
             { 'location' => '/var/log/maillog', 'log_format' => 'syslog' },
           ]
-          case $::operatingsystem {
+          case $facts['os']['name'] {
             'Amazon': {
               $ossec_service_provider = 'systemd'
             }
             'CentOS': {
 
-              if ( $::operatingsystemrelease =~ /^6.*/ ) {
+              if ( $facts['os']['release']['full'] =~ /^6.*/ ) {
                 $ossec_service_provider = 'redhat'
 
                 $wodle_openscap_content = {
@@ -374,7 +374,7 @@ class wazuh::params_agent {
                   }
                 }
               }
-              if ( $::operatingsystemrelease =~ /^7.*/ ) {
+              if ( $facts['os']['release']['full'] =~ /^7.*/ ) {
                 $ossec_service_provider = 'systemd'
 
                 $wodle_openscap_content = {
@@ -389,7 +389,7 @@ class wazuh::params_agent {
               }
             }
             /^(RedHat|OracleLinux)$/: {
-              if ( $::operatingsystemrelease =~ /^6.*/ ) {
+              if ( $facts['os']['release']['full'] =~ /^6.*/ ) {
                 $ossec_service_provider = 'redhat'
 
                 $wodle_openscap_content = {
@@ -405,7 +405,7 @@ class wazuh::params_agent {
                   }
                 }
               }
-              if ( $::operatingsystemrelease =~ /^7.*/ ) {
+              if ( $facts['os']['release']['full'] =~ /^7.*/ ) {
                 $ossec_service_provider = 'systemd'
 
                 $wodle_openscap_content = {
@@ -421,7 +421,7 @@ class wazuh::params_agent {
                   }
                 }
               }
-              if ( $::operatingsystemrelease =~ /^8.*/ ) {
+              if ( $facts['os']['release']['full'] =~ /^8.*/ ) {
                 $ossec_service_provider = 'systemd'
 
                 $wodle_openscap_content = {
@@ -439,7 +439,7 @@ class wazuh::params_agent {
               }
             }
             'Fedora': {
-              if ( $::operatingsystemrelease =~ /^(23|24|25).*/ ) {
+              if ( $facts['os']['release']['full'] =~ /^(23|24|25).*/ ) {
                 $ossec_service_provider = 'redhat'
 
                 $wodle_openscap_content = {
@@ -454,12 +454,12 @@ class wazuh::params_agent {
               }
             }
             'AlmaLinux': {
-              if ( $::operatingsystemrelease =~ /^8.*/ ) {
+              if ( $facts['os']['release']['full'] =~ /^8.*/ ) {
                 $ossec_service_provider = 'redhat'
               }
             }
             'Rocky': {
-              if ( $::operatingsystemrelease =~ /^8.*/ ) {
+              if ( $facts['os']['release']['full'] =~ /^(8|9).*/ ) {
                 $ossec_service_provider = 'redhat'
               }
             }
@@ -476,9 +476,9 @@ class wazuh::params_agent {
             { 'location' => '/var/log/secure', 'log_format' => 'syslog' },
             { 'location' => '/var/log/maillog', 'log_format' => 'syslog' },
           ]
-          case $::operatingsystem {
+          case $facts['os']['name'] {
             'SLES': {
-              if ( $::operatingsystemrelease =~ /^(12|15).*/ ) {
+              if ( $facts['os']['release']['full'] =~ /^(12|15).*/ ) {
                 $ossec_service_provider = 'redhat'
               }
             }
